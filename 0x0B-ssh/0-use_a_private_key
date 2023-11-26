@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# The script connects to server whose ip adrress is 54.237.46.237 and username is ubuntu
+
+private_key=~/.ssh/school
+user=ubuntu
+server_address=54.237.46.237
+
+ssh -i "$private_key" "$user@$server_address"
