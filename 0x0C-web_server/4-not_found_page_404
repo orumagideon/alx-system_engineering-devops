@@ -1,20 +1,23 @@
 #!/usr/bin/env bash
-# configures an Nginx server so that /redirect_me redirects to another page.
-# Redirection is configured as a "301 Moved Permanently"
-# Includes a custom 404 page containing "Ceci n'est pas une page".
+# Sets up an Nginx server to redirect /redirect_me to another page with a "301 Moved Permanently" response.
+# Additionally, includes a custom 404 page featuring the phrase "Ceci n'est pas une page".
 
-# Updates the package lists for available software packages.
+# Updates available software packages by refreshing package lists.
 apt-get update
+
 # Installs the Nginx web server.
 apt-get install -y nginx
 
-# Creates the /etc/nginx/html directory, which will serve as the document root directory for Nginx.
+# Creates the /etc/nginx/html directory to serve as Nginx's document root.
 mkdir /etc/nginx/html
-#  creates an empty index.html file inside the /etc/nginx/html directory.
+
+# Creates an empty index.html file within /etc/nginx/html.
 touch /etc/nginx/html/index.html
-#  sets the content of the index.html file to "Hello World!" using the echo command.
+
+# Sets the content of index.html to "Hello World!" using the echo command.
 echo "Hello World!" > /etc/nginx/html/index.html
-# Sets Nginx to listen on port 80 and serve files from the /etc/nginx/html directory.
+
+# Configures Nginx to listen on port 80 and serve files from /etc/nginx/html.
 printf %s "server {
      listen      80 default_server;
      listen      [::]:80 default_server;
@@ -23,16 +26,16 @@ printf %s "server {
 }
 " > /etc/nginx/sites-available/default
 
-#  creates an empty file named 404.html inside the /etc/nginx/html directory.
+# Creates an empty 404.html file within /etc/nginx/html.
 touch /etc/nginx/html/404.html
 
-# Paste a 404 response in the 404.html file
+# Adds a "Ceci n'est pas une page" response to the 404.html file.
 echo "Ceci n'est pas une page" | sudo tee /etc/nginx/html/404.html
 
-# Display script completion message
+# Indicates completion of Nginx installation and configuration.
 echo "Nginx installation and configuration completed."
 
-# Configuration file for the redirection
+# Generates a configuration file for the redirection.
 echo "server {
     listen      80;
     listen      [::]:80;
@@ -54,9 +57,9 @@ echo "server {
 
 }" | sudo tee /etc/nginx/sites-available/default
 
-# New site configuration
+# Enables the new site configuration by creating a symbolic link.
 sudo ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
 
-# Nginx configuration and reload test
+# Tests the Nginx configuration and reloads the server.
 sudo nginx -t
 sudo service nginx reload

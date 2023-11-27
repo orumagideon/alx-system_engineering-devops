@@ -1,9 +1,27 @@
 #!/usr/bin/env bash
-# install nginx on my server ubuntu@3.90.85.212
+# Installs Nginx with the following configurations:
+#+    Listens on port 80.
+#+    Returns a page containing "Hello World!" when queried
+#++   root GET request.
 
-sudo apt update
-sudo apt upgrade -y
+apt-get update
+# installs the Nginx web server.
+apt-get install -y nginx
 
-sudo apt-get -y install nginx
-echo 'Hello World!' > /var/www/index.nginx-debian.html
-sudo service nginx restart
+# Creates the /etc/nginx/html directory, which will serve as the document root directory for Nginx.
+mkdir /etc/nginx/html
+#  creates an empty index.html file inside the /etc/nginx/html directory.
+touch /etc/nginx/html/index.html
+#  sets the content of the index.html file to "Hello World!" using the echo command.
+echo "Hello World!" > /etc/nginx/html/index.html
+# Listen on port 80 and serve files from /etc/nginx/html directory.
+printf %s "server {
+     listen      80;
+     listen      [::]:80 default_server;
+     root        /etc/nginx/html;
+     index       index.html index.htm;
+}
+" > /etc/nginx/sites-available/default
+
+# Applies the configuration changes.
+service nginx restart
