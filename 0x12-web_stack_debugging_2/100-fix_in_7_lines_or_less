@@ -1,6 +1,6 @@
-#!/bin/bash
-if ! command -v curl &> /dev/null; then
-    echo "curl is required but not installed. Please install it."
-    exit 1
-fi
-curl -O https://example.com/file.txt
+#!/usr/bin/env bash
+# Running nginx as nginx and fixing port from 80 to 8080
+pkill apache2
+sed -i 's/80/8080/g' /etc/nginx/sites-available/default
+chmod 644 /etc/nginx/nginx.conf
+sudo -u nginx service nginx restart

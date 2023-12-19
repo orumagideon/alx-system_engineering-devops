@@ -1,24 +1,7 @@
 #!/usr/bin/env bash
-# Change permissions to allow the owner to read and write to the config file
-
-chmod 644 /etc/nginx/nginx.conf
-
-# Create a new user named 'nginx' without a home directory or login privileges
-username="nginx"
-
-# Check if the user already exists
-if ! id -u "$username" >/dev/null 2>&1; then
-    sudo useradd --system --no-create-home --shell /usr/sbin/nologin --comment "Nginx system user" --user-group "$username"
-fi
-
-# Use sed to modify the nginx.conf file, replacing 'www-data' with 'nginx'
-sed -i "s/www-data/nginx/" /etc/nginx/nginx.conf
-
-# Replace port 80 with 8080 in the default file to make the webserver listen on port 8080
-sed -i "s/80/8080/g" /etc/nginx/sites-available/default
-
-# If Apache is running, terminate the process
+# A BASH Script that runs nignx webserver as nginx and also configures nginx to
+# listen to port 8080
 pkill apache2
-
-# Restart nginx to apply the changes
-service nginx restart
+sed -i 's/80/8080/g' /etc/nginx/sites-available/default
+chmod 644 /etc/nginx/nginx.conf
+sudo -u nginx service nginx restart
