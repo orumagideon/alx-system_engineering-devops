@@ -1,0 +1,27 @@
+- name: Playbook to install mysql on web-01 and web-02
+  hosts: Webservers
+  become: true
+  gather_facts: true
+  tasks:
+
+    - name: Ansible apt update
+      apt:
+        update_cache: yes
+
+    - name: Ansible apt install mysql version 5.7
+      apt:
+        name: mysql-server-8.0
+        state: present
+
+    - name: Start mysql server
+      service:
+        name: mysql
+        state: started
+
+    - name: check mysql status
+      command: sudo service mysql status
+      register: mysql_status
+
+    - name: Show mysql status
+      debug:
+        msg: "MySQL server is {{ mysql_status.stdout_lines[2] }}"
